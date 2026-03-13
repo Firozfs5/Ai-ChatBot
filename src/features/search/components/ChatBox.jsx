@@ -5,18 +5,22 @@ import rehypeHighlight from "rehype-highlight";
 const ChatBox = ({ role, content }) => {
   if (role == "assistant") {
     return (
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
-      >
-        {content}
-      </ReactMarkdown>
+      <div className="leading-relaxed">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeHighlight]}
+        >
+          {content}
+        </ReactMarkdown>
+      </div>
     );
   }
 
   return (
     <div className="w-full flex justify-end ">
-      <div className="bg-[#003f7a] p-3 rounded-3xl mb-6 mt-6">{content}</div>
+      <div className="bg-[#003f7a] p-4 py-3 rounded-4xl mb-6 mt-6">
+        {content}
+      </div>
     </div>
   );
 };
