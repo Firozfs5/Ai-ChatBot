@@ -1,7 +1,6 @@
 import { URL } from "../utils/constants";
 
 const openRouter = async function (question) {
-  console.log(question);
   let response = await fetch(URL, {
     method: "POST",
     headers: {

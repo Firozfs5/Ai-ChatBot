@@ -9,6 +9,7 @@ function HistoryTab({
   setChatHistory,
   setSessionOrder,
   currentSessionId,
+  setTaskBarOpen,
 }) {
   function deleteChat(chatId) {
     setChatHistory((prev) => {
@@ -37,7 +38,7 @@ function HistoryTab({
         <div className="h-8 w-8 ">
           <img src="/openaiLogo.svg" alt="logo" className="" />
         </div>
-        <div>
+        <button onClick={() => setTaskBarOpen((prev) => !prev)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
@@ -47,7 +48,7 @@ function HistoryTab({
           >
             <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm120-80v-560H200v560h120Zm80 0h360v-560H400v560Zm-80 0H200h120Z" />
           </svg>
-        </div>
+        </button>
       </div>
       {/* header ends */}
 
@@ -94,7 +95,6 @@ function HistoryTab({
         </div>
         <div className=" h-[82vh] overflow-y-auto chat-scroll">
           {sessionOrder.map((ele, idx) => {
-            // console.log(ele);
             const preview = chatHistory[sessionOrder[idx]][1]?.content
               ? chatHistory[sessionOrder[idx]][1]?.content.slice(0, 25) + "..."
               : "New Chat";

@@ -4,10 +4,12 @@ import "highlight.js/styles/github.css";
 import HistoryTab from "./features/history/components/HistoryTab";
 import { WELCOME_MSG } from "./utils/constants";
 import ConversationBox from "./features/search/components/ConversationBox";
+import MiniHistoryTab from "./features/history/components/MiniHistoryTab";
 //alternative for saying hello
 
 function App() {
   const [question, setQuestion] = useState("");
+  const [taskBarOpen, setTaskBarOpen] = useState(false);
 
   const [chatHistory, setChatHistory] = useState(() => {
     const saved = localStorage.getItem("History");
@@ -66,23 +68,42 @@ function App() {
       JSON.stringify([DEFAULT_ID, ...sessionOrder]),
     );
   };
-  console.log(chatHistory);
   return (
-    <div className="bg-[#101011] h-screen w-screen flex overflow-x-hidden chat-scroll">
-      <div className="bg-amber-200 w-64 ">
-        <div className="fixed bg-[#181818] z-11 w-64 h-screen">
-          <HistoryTab
-            chatHistory={chatHistory}
-            newChatFunction={newChatFunction}
-            setCurrentSessionId={setCurrentSessionId}
-            sessionOrder={sessionOrder}
-            deleteAllChats={deleteAllChats}
-            setChatHistory={setChatHistory}
-            setSessionOrder={setSessionOrder}
-            currentSessionId={currentSessionId}
-          />
+    <div className="bg-[#101011] h-screen w-screen flex overflow-x-hidden chat-scroll ">
+      {taskBarOpen ? (
+        <div className=" w-64 transition-all duration-600 ease-in-out">
+          <div className="fixed bg-[#181818] z-11 w-64 h-screen">
+            <HistoryTab
+              chatHistory={chatHistory}
+              newChatFunction={newChatFunction}
+              setCurrentSessionId={setCurrentSessionId}
+              sessionOrder={sessionOrder}
+              deleteAllChats={deleteAllChats}
+              setChatHistory={setChatHistory}
+              setSessionOrder={setSessionOrder}
+              currentSessionId={currentSessionId}
+              setTaskBarOpen={setTaskBarOpen}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className=" w-14  h-screen transition-all duration-300 ease-in-out">
+          <div className="fixed bg-[#] z-11  h-screen border-r border-[#424242] ">
+            <MiniHistoryTab
+              chatHistory={chatHistory}
+              newChatFunction={newChatFunction}
+              setCurrentSessionId={setCurrentSessionId}
+              sessionOrder={sessionOrder}
+              deleteAllChats={deleteAllChats}
+              setChatHistory={setChatHistory}
+              setSessionOrder={setSessionOrder}
+              currentSessionId={currentSessionId}
+              setTaskBarOpen={setTaskBarOpen}
+            />
+          </div>
+        </div>
+      )}
+
       <ConversationBox
         question={question}
         setQuestion={setQuestion}
