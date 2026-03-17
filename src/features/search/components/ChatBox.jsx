@@ -5,7 +5,7 @@ import rehypeHighlight from "rehype-highlight";
 const ChatBox = ({ role, content }) => {
   if (role == "assistant") {
     return (
-      <div className="leading-relaxed">
+      <div className="leading-relaxed pb-10">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeHighlight]}

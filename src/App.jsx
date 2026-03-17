@@ -40,6 +40,20 @@ function App() {
     });
   };
 
+  const deleteAllChats = () => {
+    const DEFAULT_ID = Date.now().toString();
+
+    const initial = {
+      [DEFAULT_ID]: WELCOME_MSG,
+    };
+
+    setChatHistory(initial);
+    setSessionOrder([DEFAULT_ID]);
+    setCurrentSessionId(DEFAULT_ID);
+    localStorage.setItem("History", JSON.stringify(initial));
+    localStorage.setItem("sessionOrder", JSON.stringify([DEFAULT_ID]));
+  };
+
   const newChatFunction = () => {
     const DEFAULT_ID = Date.now().toString();
     let newChatHistory = { ...chatHistory, [DEFAULT_ID]: WELCOME_MSG };
@@ -52,7 +66,7 @@ function App() {
       JSON.stringify([DEFAULT_ID, ...sessionOrder]),
     );
   };
-
+  console.log(chatHistory);
   return (
     <div className="bg-[#101011] h-screen w-screen flex overflow-x-hidden chat-scroll">
       <div className="bg-amber-200 w-64 ">
@@ -62,6 +76,10 @@ function App() {
             newChatFunction={newChatFunction}
             setCurrentSessionId={setCurrentSessionId}
             sessionOrder={sessionOrder}
+            deleteAllChats={deleteAllChats}
+            setChatHistory={setChatHistory}
+            setSessionOrder={setSessionOrder}
+            currentSessionId={currentSessionId}
           />
         </div>
       </div>

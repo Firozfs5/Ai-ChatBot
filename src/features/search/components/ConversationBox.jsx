@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TypeBox from "./TypeBox";
 import ChatBox from "./ChatBox";
+import ChatSpiner from "../../../../shared/ChatSpiner";
 
 function ConversationBox({
   addQueriesAnswers,
@@ -9,6 +10,13 @@ function ConversationBox({
   chatHistory,
   currentSessionId,
 }) {
+  let [isLoader, setIsLoader] = useState(false);
+  let bottomDiv = useRef(null);
+
+  useEffect(() => {
+    bottomDiv.current.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [chatHistory, currentSessionId]);
+
   return (
     <div className="bg-[#101011] flex-1 px-4 text-white flex flex-col ">
       {/* header */}
@@ -46,13 +54,15 @@ function ConversationBox({
       <div className="bg-[#101011] flex justify-center items-center pb-[8%]">
         <div className=" w-3xl p-4 mt-4">
           <div className="">
-            {chatHistory[currentSessionId].map((convoItem, idx) => (
+            {chatHistory[currentSessionId]?.map((convoItem, idx) => (
               <ChatBox
                 key={idx}
                 role={convoItem.role}
                 content={convoItem.content}
               />
             ))}
+            {isLoader && <ChatSpiner />}
+            <div ref={bottomDiv} />
           </div>
         </div>
       </div>
@@ -62,6 +72,7 @@ function ConversationBox({
           setQuestion={setQuestion}
           addQueriesAnswers={addQueriesAnswers}
           chatHistory={chatHistory}
+          setIsLoader={setIsLoader}
         />
       </div>
     </div>

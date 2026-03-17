@@ -1,7 +1,7 @@
 import React from "react";
 import useAskAI from "../hooks/useAskAi";
 
-function TypeBox({ addQueriesAnswers, setQuestion, question }) {
+function TypeBox({ addQueriesAnswers, setQuestion, question, setIsLoader }) {
   const { askQuestion } = useAskAI();
 
   return (
@@ -12,8 +12,19 @@ function TypeBox({ addQueriesAnswers, setQuestion, question }) {
         onChange={(e) => setQuestion(e.target.value)}
         className="outline-none w-full h-full p-3"
         placeholder="Ask Me Anything"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            askQuestion(question, addQueriesAnswers, setIsLoader);
+            setQuestion("");
+          }
+        }}
       />
-      <button onClick={() => askQuestion(question, addQueriesAnswers)}>
+      <button
+        onClick={() => {
+          askQuestion(question, addQueriesAnswers, setIsLoader);
+          setQuestion("");
+        }}
+      >
         Ask
       </button>
     </div>

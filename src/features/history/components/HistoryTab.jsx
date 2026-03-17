@@ -5,7 +5,31 @@ function HistoryTab({
   setCurrentSessionId,
   chatHistory,
   sessionOrder,
+  deleteAllChats,
+  setChatHistory,
+  setSessionOrder,
+  currentSessionId,
 }) {
+  function deleteChat(chatId) {
+    setChatHistory((prev) => {
+      const { [chatId]: _, ...rest } = prev;
+      localStorage.setItem("History", JSON.stringify(rest));
+      return rest;
+    });
+
+    setSessionOrder((prev) => {
+      const updated = prev.filter((item) => item !== chatId);
+
+      // 🔥 if current chat deleted → switch to another
+      if (chatId === currentSessionId) {
+        setCurrentSessionId(updated[0] || null);
+      }
+      localStorage.setItem("sessionOrder", JSON.stringify(updated));
+
+      return updated;
+    });
+  }
+
   return (
     <div className="px-2 py-1 text-[15px] ">
       {/* header */}
@@ -46,7 +70,10 @@ function HistoryTab({
       </div>
 
       <div>
-        <button className="flex justify-left rounded-xl items-center p-2 hover:bg-[#303030]  w-[90%] mb-1">
+        <button
+          onClick={() => deleteAllChats()}
+          className="flex justify-left rounded-xl items-center p-2 hover:bg-[#303030]  w-[90%] mb-1"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24px"
@@ -67,18 +94,34 @@ function HistoryTab({
         </div>
         <div className=" h-[82vh] overflow-y-auto chat-scroll">
           {sessionOrder.map((ele, idx) => {
+            // console.log(ele);
             const preview = chatHistory[sessionOrder[idx]][1]?.content
               ? chatHistory[sessionOrder[idx]][1]?.content.slice(0, 25) + "..."
               : "New Chat";
-            // console.log(chatHistory[sessionOrder[idx]][1][`content`]);
-            // console.log();
+
             return (
               <div
                 key={idx}
                 onClick={() => setCurrentSessionId(ele)}
-                className="flex justify-left rounded-xl text-white items-center p-2 hover:bg-[#303030]  w-[90%] mb-1"
+                className="group flex justify-between rounded-xl text-white items-center p-2 hover:bg-[#303030]  w-[90%] mb-1"
               >
-                {preview}
+                <span>{preview}</span>
+                <span
+                  onClick={() => {
+                    deleteChat(ele);
+                  }}
+                  className="group-hover:opacity-100 opacity-0 transition duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#e3e3e3"
+                  >
+                    <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                  </svg>
+                </span>
               </div>
             );
           })}
